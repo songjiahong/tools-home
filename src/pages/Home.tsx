@@ -86,6 +86,8 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="https://floorplan.hexagonprofile.com/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-primary inline-flex items-center justify-center space-x-2"
               >
                 <span>Try Floor Plan Tool</span>
@@ -93,6 +95,8 @@ export default function Home() {
               </a>
               <a 
                 href="https://deployment-dashboard.hexagonprofile.com/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center justify-center space-x-2"
               >
                 <span>Try Deployment Dashboard</span>
