@@ -61,6 +61,9 @@ export default function Layout() {
                   <a href="https://deployment-dashboard.hexagonprofile.com/" className="hover:text-primary-400 transition-colors">Deployment Dashboard</a>
                 </li>
                 <li>
+                  <a href="https://github.com/songjiahong/tools-home" target="_blank" rel="noopener noreferrer" className="hover:text-primary-400 transition-colors">⭐ GitHub</a>
+                </li>
+                <li>
                   <a href="https://github.com/sponsors/songjiahong" target="_blank" rel="noopener noreferrer" className="hover:text-primary-400 transition-colors">💖 Sponsor</a>
                 </li>
                 <li>
@@ -75,7 +78,7 @@ export default function Layout() {
             <div>
               <h3 className="text-white font-semibold mb-4">About</h3>
               <p className="text-gray-400 text-sm">
-                We provide free, easy-to-use online tools to help you work smarter and faster. No registration required.
+                Free, open-source online tools to help you work smarter and faster. No registration required. Licensed under MIT.
               </p>
             </div>
           </div>

@@ -285,21 +285,32 @@ export default function Home() {
 
       <section className="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">💖 Support This Project</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">💖 Open Source</h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            These tools are completely free and open for everyone. If you find them useful, consider sponsoring to help keep them running and support future development.
+            These tools are completely free, open-source (MIT License), and available for everyone. If you find them useful, consider sponsoring to help keep them running and support future development.
           </p>
-          <a 
-            href="https://github.com/sponsors/songjiahong"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            <span>💖</span>
-            <span>Sponsor on GitHub</span>
-          </a>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href="https://github.com/songjiahong/tools-home"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center space-x-2 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <span>⭐</span>
+              <span>View on GitHub</span>
+            </a>
+            <a 
+              href="https://github.com/sponsors/songjiahong"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              <span>💖</span>
+              <span>Sponsor on GitHub</span>
+            </a>
+          </div>
           <p className="text-sm text-gray-500 mt-4">
-            Your support helps maintain and improve these free tools for everyone
+            Open source MIT License • Your support helps maintain and improve these free tools
           </p>
         </div>
       </section>
