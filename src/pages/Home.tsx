@@ -220,10 +220,10 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               <div>
                 <div className="text-4xl font-bold text-primary-600 mb-2">100%</div>
-                <div className="text-gray-600 font-medium">Free Forever</div>
+                <div className="text-gray-600 font-medium">Free</div>
               </div>
               <div>
-                <div className="text-4xl font-bold text-primary-600 mb-2">0</div>
+                <div className="text-4xl font-bold text-primary-600 mb-2">NO</div>
                 <div className="text-gray-600 font-medium">Registration Required</div>
               </div>
               <div>
