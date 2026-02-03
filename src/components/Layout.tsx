@@ -11,7 +11,7 @@ export default function Layout() {
               <div className="bg-primary-600 p-2 rounded-lg group-hover:bg-primary-700 transition-colors">
                 <Wrench className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">Hexagon Profile Tools</span>
+              <span className="text-xl font-bold text-gray-900">Hexagon Tools</span>
             </Link>
             
             <div className="flex items-center space-x-6">
@@ -41,7 +41,7 @@ export default function Layout() {
                 <div className="bg-primary-600 p-2 rounded-lg">
                   <Wrench className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-lg font-bold text-white">Hexagon Profile Tools</span>
+                <span className="text-lg font-bold text-white">Hexagon Tools</span>
               </div>
               <p className="text-gray-400 text-sm">
                 Your collection of free, powerful online tools for productivity and creativity.
@@ -56,6 +56,12 @@ export default function Layout() {
                 </li>
                 <li>
                   <a href="https://floorplan.hexagonprofile.com/" className="hover:text-primary-400 transition-colors">Floor Plan Tool</a>
+                </li>
+                <li>
+                  <a href="https://deployment-dashboard.hexagonprofile.com/" className="hover:text-primary-400 transition-colors">Deployment Dashboard</a>
+                </li>
+                <li>
+                  <a href="https://github.com/sponsors/songjiahong" target="_blank" rel="noopener noreferrer" className="hover:text-primary-400 transition-colors">💖 Sponsor</a>
                 </li>
                 <li>
                   <Link to="/terms" className="hover:text-primary-400 transition-colors">Terms & Conditions</Link>
@@ -75,7 +81,7 @@ export default function Layout() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; {new Date().getFullYear()} Hexagon Profile Tools. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Hexagon Tools. All rights reserved.</p>
           </div>
         </div>
       </footer>

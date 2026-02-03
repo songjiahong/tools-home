@@ -1,4 +1,4 @@
-import { ExternalLink, Ruler, Sparkles, Zap, LucideIcon } from 'lucide-react'
+import { ExternalLink, Ruler, Sparkles, Zap, LucideIcon, GitBranch } from 'lucide-react'
 
 interface Tool {
   id: number
@@ -8,6 +8,7 @@ interface Tool {
   url: string
   color: string
   features: string[]
+  screenshots?: string[]
 }
 
 interface UpcomingTool {
@@ -25,6 +26,7 @@ export default function Home() {
       icon: Ruler,
       url: 'https://floorplan.hexagonprofile.com/',
       color: 'bg-blue-500',
+      screenshots: ['/images/floorplan.png'],
       features: [
         'Draw walls with adjustable thickness (5-50 cm) and smart snapping to endpoints and midpoints',
         'Add doors with arc swing animation and windows with glass panes - fully customizable widths (30-300 cm)',
@@ -34,6 +36,24 @@ export default function Home() {
         'Grid snapping for precise alignment and connected walls that move together',
         'Save your floor plans as JSON files and load them later - all elements preserved',
         'Keyboard shortcuts: Delete to remove elements, Escape to cancel operations'
+      ]
+    },
+    {
+      id: 2,
+      name: 'Bitbucket Deployment Dashboard',
+      description: 'A modern web application for managing and monitoring Bitbucket deployments with OAuth authentication. Streamline your CI/CD workflow with real-time deployment tracking, manual deployment triggers, and comprehensive project management. Perfect for development teams, DevOps engineers, and project managers who need centralized control over their Bitbucket pipelines and deployments.',
+      icon: GitBranch,
+      url: 'https://deployment-dashboard.hexagonprofile.com/',
+      color: 'bg-purple-500',
+      screenshots: ['/images/deployment-dashboard/home.png', '/images/deployment-dashboard/dashboard.png'],
+      features: [
+        'Secure Bitbucket OAuth authentication - users sign in with their Bitbucket credentials, no manual token creation needed',
+        'Dashboard overview displaying all projects and repositories in one centralized location',
+        'Real-time deployment status monitoring with color-coded badges (Success, Failed, In Progress, Unknown)',
+        'Manual deployment triggers - deploy directly from the dashboard with a single click',
+        'Project management - add or remove projects/repositories from your dashboard view',
+        'Multi-workspace support - switch between different Bitbucket workspaces seamlessly',
+        'Pipeline monitoring with build numbers, branches, and deployment environments'
       ]
     }
   ]
@@ -69,6 +89,13 @@ export default function Home() {
                 className="btn-primary inline-flex items-center justify-center space-x-2"
               >
                 <span>Try Floor Plan Tool</span>
+                <ExternalLink className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://deployment-dashboard.hexagonprofile.com/" 
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg inline-flex items-center justify-center space-x-2"
+              >
+                <span>Try Deployment Dashboard</span>
                 <ExternalLink className="w-5 h-5" />
               </a>
               <a 
@@ -129,22 +156,28 @@ export default function Home() {
                       </a>
                     </div>
                     
-                    <div className="relative group h-full flex items-center">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-                      <div className="relative w-full">
-                        <a 
-                          href={tool.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block"
-                        >
-                          <img 
-                            src="/images/floorplan.png" 
-                            alt="Floor Plan Designer Tool Screenshot"
-                            className="w-full h-auto rounded-2xl shadow-2xl border-4 border-white group-hover:scale-[1.02] transition-transform duration-300"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        </a>
+                    <div className={`relative h-full flex ${tool.screenshots && tool.screenshots.length > 1 ? 'items-start' : 'items-center'} justify-center`}>
+                      <div className={`w-full ${tool.screenshots && tool.screenshots.length > 1 ? 'space-y-3' : ''}`}>
+                        {tool.screenshots?.map((screenshot, idx) => (
+                          <div key={idx} className={`relative group ${tool.screenshots && tool.screenshots.length > 1 && idx === 0 ? 'flex justify-center' : ''}`}>
+                            <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+                            <div className={`relative ${tool.screenshots && tool.screenshots.length > 1 && idx === 0 ? 'w-auto' : 'w-full'}`}>
+                              <a 
+                                href={tool.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block"
+                              >
+                                <img 
+                                  src={screenshot} 
+                                  alt={`${tool.name} Screenshot ${idx + 1}`}
+                                  className={`${tool.screenshots && tool.screenshots.length > 1 && idx === 0 ? 'h-auto max-h-[300px] w-auto' : 'w-full h-auto'} rounded-2xl shadow-2xl border-4 border-white group-hover:scale-[1.02] transition-transform duration-300`}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                              </a>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -247,6 +280,27 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">💖 Support This Project</h2>
+          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+            These tools are completely free and open for everyone. If you find them useful, consider sponsoring to help keep them running and support future development.
+          </p>
+          <a 
+            href="https://github.com/sponsors/songjiahong"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            <span>💖</span>
+            <span>Sponsor on GitHub</span>
+          </a>
+          <p className="text-sm text-gray-500 mt-4">
+            Your support helps maintain and improve these free tools for everyone
+          </p>
         </div>
       </section>
     </div>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://floorplan.hexagonprofile.com/sitemap.xml
+Sitemap: https://www.hexagonprofile.com/sitemap.xml
