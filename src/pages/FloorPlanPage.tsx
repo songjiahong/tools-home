@@ -14,6 +14,9 @@ export const TEMPLATE_PAGES: { id: TemplateId; slug: string; k: TemplateId }[] =
   { id: 'bedroom', slug: 'bedroom-layout', k: 'bedroom' },
   { id: 'office', slug: 'office-layout', k: 'office' },
   { id: 'house', slug: '3-bedroom-house', k: 'house' },
+  { id: 'bathroom', slug: 'bathroom-layout', k: 'bathroom' },
+  { id: 'living', slug: 'open-plan-kitchen-living', k: 'living' },
+  { id: 'tiny', slug: 'tiny-house', k: 'tiny' },
 ]
 
 const FAQ: [TKey, TKey][] = [

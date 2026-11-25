@@ -17,22 +17,45 @@ const { terms, privacy } = await bundle('src/pages/legalContent.ts', 'legal.mjs'
 const { guides } = await bundle('src/pages/guideContent.ts', 'guides.mjs')
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+const TEMPLATES = [['studio-apartment', 'studio'], ['1-bedroom-apartment', 'one'], ['2-bedroom-apartment', 'two'], ['bedroom-layout', 'bedroom'], ['office-layout', 'office'], ['3-bedroom-house', 'house'], ['bathroom-layout', 'bathroom'], ['open-plan-kitchen-living', 'living'], ['tiny-house', 'tiny']]
 const routes = [
   { path: '/', og: '/og/home.jpg', meta: (l) => [dictionaries[l]['home.title'], dictionaries[l]['home.desc']] },
-  { path: '/floor-plan', og: '/og/floor-plan.jpg', meta: (l) => [dictionaries[l]['fp.title'], dictionaries[l]['fp.desc']] },
-  ...[['studio-apartment', 'studio'], ['1-bedroom-apartment', 'one'], ['2-bedroom-apartment', 'two'], ['bedroom-layout', 'bedroom'], ['office-layout', 'office'], ['3-bedroom-house', 'house']].map(([slug, k]) => ({
+  { path: '/floor-plan', og: '/og/floor-plan.jpg', tpl: '', meta: (l) => [dictionaries[l]['fp.title'], dictionaries[l]['fp.desc']] },
+  ...TEMPLATES.map(([slug, k]) => ({
     path: `/floor-plan/${slug}`,
     og: `/og/${slug}.jpg`,
+    tpl: k,
     meta: (l) => [dictionaries[l][`fp.tplPage.${k}.title`], dictionaries[l][`fp.tplPage.${k}.desc`]],
   })),
   ...guides.map((g) => ({
     path: `/guides/${g.slug}`,
+    guide: g,
     og: g.ogImage,
     meta: (l) => [`${g.content[l].title} | Hexagon Profile`, g.content[l].desc],
   })),
   { path: '/terms', meta: (l) => [`${terms[l].title} | Hexagon Profile`, terms[l].metaDesc] },
   { path: '/privacy', meta: (l) => [`${privacy[l].title} | Hexagon Profile`, privacy[l].metaDesc] },
 ]
+
+
+// Crawlable body content, placed inside #root. React's createRoot replaces it on load, so users never see both.
+const lp = (l, p) => (l === 'zh' ? `/zh${p}` : p)
+const list = (tag, items) => `<${tag}>${items.map((x) => `<li>${esc(x)}</li>`).join('')}</${tag}>`
+function bodyFor(r, l) {
+  const d = dictionaries[l]
+  if (r.guide) {
+    const c = r.guide.content[l]
+    const secs = c.sections.map((x) => `<section><h2>${esc(x.h)}</h2>${(x.p || []).map((t) => `<p>${esc(t)}</p>`).join('')}${x.ol ? list('ol', x.ol) : ''}${x.ul ? list('ul', x.ul) : ''}</section>`).join('')
+    return `<article><h1>${esc(c.h1)}</h1><p>${esc(c.intro)}</p>${secs}<p><a href="${lp(l, '/floor-plan')}">${esc(c.cta)}</a></p></article>`
+  }
+  if (r.tpl === undefined) return ''
+  const h1 = r.tpl ? d[`fp.tplPage.${r.tpl}.h1`] : d['fp.h1']
+  const desc = r.tpl ? d[`fp.tplPage.${r.tpl}.desc`] : d['fp.desc']
+  const faq = [1, 2, 3, 4, 5, 6].map((i) => `<h3>${esc(d[`fp.faq.q${i}`])}</h3><p>${esc(d[`fp.faq.a${i}`])}</p>`).join('')
+  const tpls = TEMPLATES.map(([slug, k]) => `<li><a href="${lp(l, `/floor-plan/${slug}`)}">${esc(d[`fp.tpl.${k}`])}</a></li>`).join('')
+  const gl = guides.map((g) => `<li><a href="${lp(l, `/guides/${g.slug}`)}">${esc(d[g.linkKey])}</a></li>`).join('')
+  return `<main><h1>${esc(h1)}</h1><p>${esc(desc)}</p><h2>${esc(d['fp.about.h2'])}</h2><p>${esc(d['fp.about.p'])}</p><h2>${esc(d['fp.measure.h2'])}</h2><p>${esc(d['fp.measure.p'])}</p><h2>${esc(d['fp.moreTemplates'])}</h2><ul>${tpls}</ul><h2>${esc(d['fp.guides'])}</h2><ul>${gl}</ul><h2>${esc(d['fp.faq.h2'])}</h2>${faq}</main>`
+}
 
 const base = readFileSync('dist/index.html', 'utf8')
 const urlFor = (l, p) => (l === 'zh' ? `${SITE}/zh${p === '/' ? '/' : p}` : `${SITE}${p}`)
@@ -42,6 +65,7 @@ for (const r of routes) {
     const [title, desc] = r.meta(lang)
     const self = urlFor(lang, r.path)
     let html = base
+      .replace('<div id="root"></div>', () => `<div id="root">${bodyFor(r, lang)}</div>`)
       .replace(/<html lang="[^"]*"/, `<html lang="${lang === 'zh' ? 'zh-CN' : 'en-AU'}"`)
       .replace(/<title>.*?<\/title>/, `<title>${esc(title)}</title>`)
       .replace(/(<meta name="description" content=")[^"]*"/, `$1${esc(desc)}"`)

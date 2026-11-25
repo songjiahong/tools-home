@@ -10,7 +10,7 @@ import { svgToPngBlob } from './utils/pngExport'
 import { getTemplate, TemplateId, PlanData } from './templates'
 import { encodePlan, decodePlan, readShareToken } from './share'
 import { FURNITURE } from './furniture'
-import { Unit } from './utils/units'
+import { Unit, UNITS } from './utils/units'
 import { useI18n } from '../i18n/I18nProvider'
 import { TKey } from '../i18n/translations'
 import { track } from '../analytics'
@@ -77,7 +77,7 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
   const [unit, setUnit] = useState<Unit>(() => {
     try {
       const u = localStorage.getItem('hp_floorplan_unit')
-      return u === 'm' || u === 'ft' ? u : 'cm'
+      return u === 'm' || u === 'ft' ? u : u === 'in' ? 'ft' : 'cm'
     } catch {
       return 'cm'
     }
@@ -339,11 +339,20 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
           <p className="text-xs text-gray-600 hidden md:block">{t('fp.sub')}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <select value={unit} onChange={(e) => changeUnit(e.target.value as Unit)} aria-label={t('fp.unit')} title={t('fp.unit')} className="px-2 py-1.5 border border-gray-300 rounded-lg text-sm bg-white text-gray-700">
-            <option value="cm">cm</option>
-            <option value="m">m</option>
-            <option value="ft">ft/in</option>
-          </select>
+          <div role="radiogroup" aria-label={t('fp.unit')} title={t('fp.unit')} className="inline-flex self-center rounded-md border border-gray-300 overflow-hidden bg-white shadow-sm">
+            {UNITS.map(({ id: u, label }, idx) => (
+              <button
+                key={u}
+                type="button"
+                role="radio"
+                aria-checked={unit === u}
+                onClick={() => changeUnit(u)}
+                className={`px-3 py-1.5 text-sm font-medium tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset ${idx > 0 ? 'border-l border-gray-300' : ''} ${unit === u ? 'bg-primary-50 text-primary-700' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <button onClick={() => setShowTemplates(true)} className={`${btn} bg-amber-500 hover:bg-amber-600`}>
             <LayoutTemplate size={16} /> {t('fp.templates')}
           </button>
@@ -491,6 +500,7 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
 
         <div className={`overflow-y-auto bg-white ${showPanel ? 'absolute right-0 top-[3.25rem] bottom-0 z-20 shadow-xl block' : 'hidden'} lg:static lg:block lg:shadow-none`}>
           <PropertiesPanel
+            unit={unit}
             selectedElementId={selectedElementId}
             wallThickness={wallThickness}
             openingWidth={openingWidth}
@@ -523,7 +533,7 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
               <button onClick={() => setShowTemplates(false)} aria-label={t('fp.tpl.close')} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {(['studio', 'one', 'two', 'bedroom', 'office', 'house'] as const).map((id) => (
+              {(['studio', 'one', 'two', 'bedroom', 'office', 'house', 'bathroom', 'living', 'tiny'] as const).map((id) => (
                 <button key={id} onClick={() => handleTemplate(id)} className="text-left border rounded-lg p-2 hover:border-primary-500 hover:bg-primary-50 transition">
                   <img src={`/images/templates/${id}.svg`} alt="" width="200" height="120" className="w-full h-20 object-contain bg-white rounded" />
                   <div className="font-semibold text-gray-800 text-sm mt-1">{t(`fp.tpl.${id}` as TKey)}</div>

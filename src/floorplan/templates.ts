@@ -9,7 +9,7 @@ export interface PlanData {
   stairs: Stair[]
 }
 
-export type TemplateId = 'studio' | 'one' | 'two' | 'bedroom' | 'office' | 'house'
+export type TemplateId = 'studio' | 'one' | 'two' | 'bedroom' | 'office' | 'house' | 'bathroom' | 'living' | 'tiny'
 
 /** [x, y, w, h, kind, rotationDeg?] in cm; label comes from the translator. */
 type Furn = [number, number, number, number, string, number?]
@@ -137,6 +137,46 @@ export function getTemplate(id: TemplateId, tr: Tr = (k) => k): PlanData {
     ], [[183, 120, 'queen'], [550, 120, 'queen'], [916, 120, 'single']], [[40, 280, 60, 110], [510, 280, 60, 110], [1060, 280, 60, 110]], [
       [250, 650, 220, 90, 'sofa'], [250, 480, 90, 140, 'table'], [850, 420, 280, 60, 'kitchen'], [1050, 400, 70, 70, 'fridge'],
       [880, 740, 40, 70, 'toilet'], [980, 760, 60, 50, 'sink'], [1060, 650, 170, 75, 'bathtub', 90],
+    ], tr)
+  }
+  if (id === 'bathroom') {
+    // 300 x 250 cm bathroom with bath, shower, toilet and basin
+    return build('bathroom', [
+      [0, 0, 300, 0], [300, 0, 300, 250], [300, 250, 0, 250], [0, 250, 0, 0],
+    ], [
+      { wall: 3, pos: 0.3, type: 'door', width: 75 },
+      { wall: 0, pos: 0.5, type: 'window', width: 80 },
+    ], [], [], [[96, 48, 170, 75, 'bathtub'], [245, 55, 90, 90, 'shower'], [255, 160, 40, 70, 'toilet', 90], [150, 215, 60, 50, 'sink']], tr)
+  }
+  if (id === 'living') {
+    // 700 x 500 cm open-plan kitchen and living room
+    return build('living', [
+      [0, 0, 700, 0], [700, 0, 700, 500], [700, 500, 0, 500], [0, 500, 0, 0],
+    ], [
+      { wall: 2, pos: 0.88, type: 'door' },
+      { wall: 0, pos: 0.3, type: 'window', width: 120 },
+      { wall: 1, pos: 0.5, type: 'window', width: 160 },
+      { wall: 3, pos: 0.5, type: 'window', width: 120 },
+    ], [], [], [
+      [130, 40, 240, 60, 'kitchen'], [290, 45, 70, 70, 'fridge'],
+      [180, 170, 140, 80, 'table'], [140, 232, 45, 45, 'chair'], [220, 232, 45, 45, 'chair'], [85, 170, 45, 45, 'chair'], [275, 170, 45, 45, 'chair'],
+      [520, 35, 120, 40, 'tv'], [520, 250, 140, 80, 'table'], [520, 440, 200, 90, 'sofa'],
+    ], tr)
+  }
+  if (id === 'tiny') {
+    // 600 x 250 cm tiny house with kitchen, living area, sleeping nook and bathroom
+    return build('tiny', [
+      [0, 0, 600, 0], [600, 0, 600, 250], [600, 250, 0, 250], [0, 250, 0, 0],
+      [450, 0, 450, 250],
+    ], [
+      { wall: 2, pos: 0.45, type: 'door' },
+      { wall: 4, pos: 0.5, type: 'door', width: 70, flip: true },
+      { wall: 0, pos: 0.2, type: 'window', width: 120 },
+      { wall: 0, pos: 0.6, type: 'window', width: 100 },
+      { wall: 3, pos: 0.35, type: 'window', width: 100 },
+    ], [[380, 110, 'single']], [], [
+      [130, 40, 240, 60, 'kitchen'], [285, 45, 70, 70, 'fridge'], [150, 190, 200, 90, 'sofa'],
+      [535, 60, 90, 90, 'shower'], [500, 185, 40, 70, 'toilet'], [560, 200, 60, 50, 'sink'],
     ], tr)
   }
   // two: 1000 x 700 cm two-bedroom apartment

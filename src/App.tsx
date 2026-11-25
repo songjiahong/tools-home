@@ -31,6 +31,9 @@ const children = (
     <Route path="floor-plan/bedroom-layout" element={<Suspense fallback={loading}><FloorPlanPage template="bedroom" /></Suspense>} />
     <Route path="floor-plan/office-layout" element={<Suspense fallback={loading}><FloorPlanPage template="office" /></Suspense>} />
     <Route path="floor-plan/3-bedroom-house" element={<Suspense fallback={loading}><FloorPlanPage template="house" /></Suspense>} />
+    <Route path="floor-plan/bathroom-layout" element={<Suspense fallback={loading}><FloorPlanPage template="bathroom" /></Suspense>} />
+    <Route path="floor-plan/open-plan-kitchen-living" element={<Suspense fallback={loading}><FloorPlanPage template="living" /></Suspense>} />
+    <Route path="floor-plan/tiny-house" element={<Suspense fallback={loading}><FloorPlanPage template="tiny" /></Suspense>} />
     {guides.map((g) => (
       <Route key={g.slug} path={`guides/${g.slug}`} element={<GuidePage guide={g} />} />
     ))}

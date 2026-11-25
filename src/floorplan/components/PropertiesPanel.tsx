@@ -1,6 +1,8 @@
 import { Wall, Opening, Dimension, Bed, Wardrobe, Stair } from '../types';
 import { getWallLength, normalizeVector } from '../utils/geometry';
 import { useI18n } from '../../i18n/I18nProvider';
+import UnitInput from './UnitInput';
+import { Unit, formatLength } from '../utils/units';
 
 interface PropertiesPanelProps {
   selectedElementId: string | null;
@@ -23,6 +25,7 @@ interface PropertiesPanelProps {
   stairs: Stair[];
   setStairs: (stairs: Stair[] | ((prev: Stair[]) => Stair[])) => void;
   saveToHistory: () => void;
+  unit: Unit;
 }
 
 export default function PropertiesPanel({
@@ -46,6 +49,7 @@ export default function PropertiesPanel({
   stairs,
   setStairs,
   saveToHistory,
+  unit,
 }: PropertiesPanelProps) {
   const { t } = useI18n();
   const selectedWall = walls.find(w => w.id === selectedElementId);
@@ -81,18 +85,7 @@ export default function PropertiesPanel({
       
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t('pp.wallThickness')}
-          </label>
-          <input
-            type="number"
-            value={wallThickness}
-            onChange={(e) => onWallThicknessChange(Number(e.target.value))}
-            min="5"
-            max="50"
-            step="1"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.wallThickness" valueCm={wallThickness} onCommit={(v) => onWallThicknessChange(v)} unit={unit} />
           <input
             type="range"
             value={wallThickness}
@@ -105,18 +98,7 @@ export default function PropertiesPanel({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t('pp.openingWidth')}
-          </label>
-          <input
-            type="number"
-            value={openingWidth}
-            onChange={(e) => onOpeningWidthChange(Number(e.target.value))}
-            min="30"
-            max="300"
-            step="5"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.openingWidth" valueCm={openingWidth} onCommit={(v) => onOpeningWidthChange(v)} unit={unit} />
           <input
             type="range"
             value={openingWidth}
@@ -161,32 +143,10 @@ export default function PropertiesPanel({
             <h3 className="text-sm font-medium text-gray-700 mb-3">{t('pp.selectedWall')}</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.length')}
-                </label>
-                <input
-                  type="number"
-                  value={Math.round(getWallLength(selectedWall) / scale)}
-                  onChange={(e) => handleWallLengthChange(Number(e.target.value))}
-                  min="10"
-                  max="2000"
-                  step="5"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.length" valueCm={getWallLength(selectedWall) / scale} onCommit={(v) => handleWallLengthChange(v)} unit={unit} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.thickness')}
-                </label>
-                <input
-                  type="number"
-                  value={selectedWall.thickness}
-                  onChange={(e) => handleWallThicknessChangeForSelected(Number(e.target.value))}
-                  min="5"
-                  max="50"
-                  step="1"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.thickness" valueCm={selectedWall.thickness} onCommit={(v) => handleWallThicknessChangeForSelected(v)} unit={unit} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -240,28 +200,14 @@ export default function PropertiesPanel({
             </h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.width')}
-                </label>
-                <input
-                  type="number"
-                  value={selectedOpening.width}
-                  onChange={(e) => {
-                    const newWidth = parseFloat(e.target.value);
-                    if (newWidth > 0) {
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.width" valueCm={selectedOpening.width} onCommit={(newWidth) => {
                       setOpenings(prevOpenings => prevOpenings.map(o => 
                         o.id === selectedOpening.id 
                           ? { ...o, width: newWidth }
                           : o
                       ));
                       setTimeout(saveToHistory, 0);
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  min="10"
-                  max="300"
-                  step="5"
-                />
+}} unit={unit} />
               </div>
               {selectedOpening.type === 'door' && (
                 <>
@@ -385,18 +331,10 @@ export default function PropertiesPanel({
             <h3 className="text-sm font-medium text-gray-700 mb-3">{t('pp.selectedDimension')}</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.length')}
-                </label>
-                <input
-                  type="number"
-                  value={Math.round(Math.sqrt(
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.length" valueCm={Math.sqrt(
                     Math.pow(selectedDimension.end.x - selectedDimension.start.x, 2) +
                     Math.pow(selectedDimension.end.y - selectedDimension.start.y, 2)
-                  ) / scale)}
-                  onChange={(e) => {
-                    const newLengthCm = parseFloat(e.target.value);
-                    if (newLengthCm > 0) {
+                  ) / scale} onCommit={(newLengthCm) => {
                       const newLengthPixels = newLengthCm * scale;
                       const angle = Math.atan2(
                         selectedDimension.end.y - selectedDimension.start.y,
@@ -412,13 +350,7 @@ export default function PropertiesPanel({
                           : d
                       ));
                       setTimeout(saveToHistory, 0);
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  min="10"
-                  max="2000"
-                  step="10"
-                />
+}} unit={unit} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -451,7 +383,7 @@ export default function PropertiesPanel({
               </p>
               <p className="text-sm text-gray-600">
                 Dimensions: <span className="font-medium">
-                  {selectedBed.size === 'queen' ? '180cm × 200cm' : '120cm × 200cm'}
+                  {formatLength(selectedBed.size === 'queen' ? 180 : 120, unit)} × {formatLength(200, unit)}
                 </span>
               </p>
               <div>
@@ -514,52 +446,24 @@ export default function PropertiesPanel({
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.width')}
-                </label>
-                <input
-                  type="number"
-                  value={selectedWardrobe.width}
-                  onChange={(e) => {
-                    const newWidth = parseFloat(e.target.value);
-                    if (newWidth > 0) {
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.width" valueCm={selectedWardrobe.width} onCommit={(newWidth) => {
                       setWardrobes(prevWardrobes => prevWardrobes.map(w =>
                         w.id === selectedWardrobe.id
                           ? { ...w, width: newWidth }
                           : w
                       ));
                       setTimeout(saveToHistory, 0);
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  min="10"
-                  max="500"
-                  step="5"
-                />
+}} unit={unit} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.height')}
-                </label>
-                <input
-                  type="number"
-                  value={selectedWardrobe.height}
-                  onChange={(e) => {
-                    const newHeight = parseFloat(e.target.value);
-                    if (newHeight > 0) {
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.height" valueCm={selectedWardrobe.height} onCommit={(newHeight) => {
                       setWardrobes(prevWardrobes => prevWardrobes.map(w =>
                         w.id === selectedWardrobe.id
                           ? { ...w, height: newHeight }
                           : w
                       ));
                       setTimeout(saveToHistory, 0);
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  min="10"
-                  max="500"
-                  step="5"
-                />
+}} unit={unit} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -606,52 +510,24 @@ export default function PropertiesPanel({
             <h3 className="text-sm font-medium text-gray-700 mb-3">{t('pp.selectedStair')}</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.width')}
-                </label>
-                <input
-                  type="number"
-                  value={selectedStair.width}
-                  onChange={(e) => {
-                    const newWidth = parseFloat(e.target.value);
-                    if (newWidth > 0) {
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.width" valueCm={selectedStair.width} onCommit={(newWidth) => {
                       setStairs(prevStairs => prevStairs.map(s =>
                         s.id === selectedStair.id
                           ? { ...s, width: newWidth }
                           : s
                       ));
                       setTimeout(saveToHistory, 0);
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  min="10"
-                  max="500"
-                  step="5"
-                />
+}} unit={unit} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('pp.height')}
-                </label>
-                <input
-                  type="number"
-                  value={selectedStair.height}
-                  onChange={(e) => {
-                    const newHeight = parseFloat(e.target.value);
-                    if (newHeight > 0) {
+                <UnitInput key={selectedElementId ?? 'none'} labelKey="pp.height" valueCm={selectedStair.height} onCommit={(newHeight) => {
                       setStairs(prevStairs => prevStairs.map(s =>
                         s.id === selectedStair.id
                           ? { ...s, height: newHeight }
                           : s
                       ));
                       setTimeout(saveToHistory, 0);
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  min="10"
-                  max="500"
-                  step="5"
-                />
+}} unit={unit} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

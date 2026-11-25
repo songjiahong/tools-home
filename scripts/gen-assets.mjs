@@ -16,7 +16,7 @@ const bundle = async (entry, out) => {
 const { getTemplate } = await bundle('src/floorplan/templates.ts', 'tpl.mjs')
 const { generateFloorPlanSVG } = await bundle('src/floorplan/utils/svgExport.ts', 'svg.mjs')
 
-const IDS = ['studio', 'one', 'two', 'bedroom', 'office', 'house']
+const IDS = ['studio', 'one', 'two', 'bedroom', 'office', 'house', 'bathroom', 'living', 'tiny']
 const TITLES = {
   studio: 'Studio Apartment Floor Plan',
   one: '1-Bedroom Apartment Floor Plan',
@@ -24,9 +24,12 @@ const TITLES = {
   bedroom: 'Bedroom Layout Floor Plan',
   office: 'Office Layout Floor Plan',
   house: '3-Bedroom House Floor Plan',
+  bathroom: 'Bathroom Layout Floor Plan',
+  living: 'Open-Plan Kitchen and Living Room Floor Plan',
+  tiny: 'Tiny House Floor Plan',
 }
-const SLUGS = { studio: 'studio-apartment', one: '1-bedroom-apartment', two: '2-bedroom-apartment', bedroom: 'bedroom-layout', office: 'office-layout', house: '3-bedroom-house' }
-const NAMES = { toilet: 'Toilet', sink: 'Sink', sofa: 'Sofa', table: 'Table', kitchen: 'Kitchen', desk: 'Desk', chair: 'Chair', fridge: 'Fridge', bathtub: 'Bath', shower: 'Shower' }
+const SLUGS = { studio: 'studio-apartment', one: '1-bedroom-apartment', two: '2-bedroom-apartment', bedroom: 'bedroom-layout', office: 'office-layout', house: '3-bedroom-house', bathroom: 'bathroom-layout', living: 'open-plan-kitchen-living', tiny: 'tiny-house' }
+const NAMES = { toilet: 'Toilet', sink: 'Sink', sofa: 'Sofa', table: 'Table', kitchen: 'Kitchen', desk: 'Desk', chair: 'Chair', fridge: 'Fridge', bathtub: 'Bath', shower: 'Shower', tv: 'TV unit' }
 
 mkdirSync('public/images/templates', { recursive: true })
 mkdirSync('public/og', { recursive: true })
@@ -69,7 +72,7 @@ const frame = (title, sub, svg) => {
 const og = { 'floor-plan': { title: ['2D Floor Plan', 'Maker – Free', '& Online'], sub: 'Draw, measure and export', svg: plans.two }, home: { title: ['Free Online', 'Tools'], sub: 'Floor plan maker and more', svg: plans.one } }
 for (const id of IDS) og[SLUGS[id]] = { title: TITLES[id].split(' Floor Plan')[0].split(/(?<=^.{14,}?) /).slice(0, 1).concat([]) , sub: '', svg: plans[id] }
 // simple explicit titles for template pages
-const T2 = { studio: ['Studio Apartment', 'Floor Plan', 'Template'], one: ['1-Bedroom', 'Apartment', 'Floor Plan'], two: ['2-Bedroom', 'Apartment', 'Floor Plan'], bedroom: ['Bedroom Layout', 'Floor Plan', 'Template'], office: ['Office Layout', 'Floor Plan', 'Template'], house: ['3-Bedroom House', 'Floor Plan', 'Template'] }
+const T2 = { studio: ['Studio Apartment', 'Floor Plan', 'Template'], one: ['1-Bedroom', 'Apartment', 'Floor Plan'], two: ['2-Bedroom', 'Apartment', 'Floor Plan'], bedroom: ['Bedroom Layout', 'Floor Plan', 'Template'], office: ['Office Layout', 'Floor Plan', 'Template'], house: ['3-Bedroom House', 'Floor Plan', 'Template'], bathroom: ['Bathroom Layout', 'Floor Plan', 'Template'], living: ['Kitchen + Living', 'Open-Plan', 'Floor Plan'], tiny: ['Tiny House', 'Floor Plan', 'Template'] }
 for (const id of IDS) og[SLUGS[id]] = { title: T2[id], sub: 'Edit online for free', svg: plans[id] }
 
 for (const [name, o] of Object.entries(og)) {
