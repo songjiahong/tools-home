@@ -26,7 +26,7 @@ function setLink(rel: string, href: string, hreflang?: string) {
 }
 
 /** Updates title/description/canonical/hreflang/OG for the current page and language. `path` is the language-neutral path, e.g. "/floor-plan". */
-export function usePageMeta(title: string, description: string, path: string, jsonLd?: object) {
+export function usePageMeta(title: string, description: string, path: string, jsonLd?: object, image?: string) {
   const { lang } = useI18n()
   useEffect(() => {
     const tail = path === '/' ? '/' : path
@@ -41,6 +41,10 @@ export function usePageMeta(title: string, description: string, path: string, js
     setMeta('meta[property="og:locale"]', 'property', 'og:locale', lang === 'zh' ? 'zh_CN' : 'en_AU')
     setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', title)
     setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', description)
+    if (image) {
+      setMeta('meta[property="og:image"]', 'property', 'og:image', `${SITE}${image}`)
+      setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', `${SITE}${image}`)
+    }
     setLink('canonical', self)
     setLink('alternate', en, 'en')
     setLink('alternate', zh, 'zh')
@@ -57,5 +61,5 @@ export function usePageMeta(title: string, description: string, path: string, js
     return () => {
       script?.remove()
     }
-  }, [lang, title, description, path, jsonLd])
+  }, [lang, title, description, path, jsonLd, image])
 }

@@ -1,0 +1,14 @@
+{
+  "name": "Hexagon Profile – 2D Floor Plan Maker",
+  "short_name": "Floor Plan",
+  "description": "Free online 2D floor plan maker. Draw, measure and export.",
+  "start_url": "/floor-plan",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

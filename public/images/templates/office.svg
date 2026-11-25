@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2140" height="1620" viewBox="110 -150 2140 1620" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="110" y="-150" width="2140" height="1620" fill="#ffffff"/>
+  
+  <!-- Walls -->
+  <polygon points="200,170 2000,170 2000,150 200,150" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="1990,160 1990,1260 2010,1260 2010,160" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="2000,1250 200,1250 200,1270 2000,1270" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="210,1260 210,160 190,160 190,1260" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="1390,160 1390,680 1410,680 1410,160" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="1400,690 2000,690 2000,670 1400,670" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="200,970 600,970 600,950 200,950" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <polygon points="590,960 590,1260 610,1260 610,960" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  
+  <!-- Openings -->
+  <g transform="translate(1009.9999999999999,1260) rotate(180)">
+    <rect x="-120" y="-10" width="240" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-120" y1="0" x2="120" y2="0" stroke="#8b5cf6" stroke-width="2"/>
+    <line x1="-120" y1="0" x2="49.70562748477141" y2="-169.70562748477138" stroke="#a78bfa" stroke-width="2"/>
+    <path d="M 49.70562748477141 -169.70562748477138 A 240 240 0 0 1 120 0" fill="none" stroke="#a78bfa" stroke-width="2"/>
+  </g>
+  <g transform="translate(1400,602) rotate(90)">
+    <rect x="-90" y="-10" width="180" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-90" y1="0" x2="90" y2="0" stroke="#8b5cf6" stroke-width="2"/>
+    <line x1="-90" y1="0" x2="37.27922061357856" y2="-127.27922061357854" stroke="#a78bfa" stroke-width="2"/>
+    <path d="M 37.27922061357856 -127.27922061357854 A 180 180 0 0 1 90 0" fill="none" stroke="#a78bfa" stroke-width="2"/>
+  </g>
+  <g transform="translate(600,1080) rotate(90)">
+    <rect x="-80" y="-10" width="160" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-80" y1="0" x2="80" y2="0" stroke="#8b5cf6" stroke-width="2"/>
+    <line x1="-80" y1="0" x2="33.13708498984761" y2="-113.1370849898476" stroke="#a78bfa" stroke-width="2"/>
+    <path d="M 33.13708498984761 -113.1370849898476 A 160 160 0 0 1 80 0" fill="none" stroke="#a78bfa" stroke-width="2"/>
+  </g>
+  <g transform="translate(470,160) rotate(0)">
+    <rect x="-160" y="-10" width="320" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-160" y1="-3.333333333333333" x2="160" y2="-3.333333333333333" stroke="#000000" stroke-width="1"/>
+    <line x1="-160" y1="3.333333333333334" x2="160" y2="3.333333333333334" stroke="#000000" stroke-width="1"/>
+  </g>
+  <g transform="translate(1010,160) rotate(0)">
+    <rect x="-160" y="-10" width="320" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-160" y1="-3.333333333333333" x2="160" y2="-3.333333333333333" stroke="#000000" stroke-width="1"/>
+    <line x1="-160" y1="3.333333333333334" x2="160" y2="3.333333333333334" stroke="#000000" stroke-width="1"/>
+  </g>
+  <g transform="translate(1730,160) rotate(0)">
+    <rect x="-160" y="-10" width="320" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-160" y1="-3.333333333333333" x2="160" y2="-3.333333333333333" stroke="#000000" stroke-width="1"/>
+    <line x1="-160" y1="3.333333333333334" x2="160" y2="3.333333333333334" stroke="#000000" stroke-width="1"/>
+  </g>
+  <g transform="translate(200,765) rotate(-90)">
+    <rect x="-160" y="-10" width="320" height="20" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <line x1="-160" y1="-3.333333333333333" x2="160" y2="-3.333333333333333" stroke="#000000" stroke-width="1"/>
+    <line x1="-160" y1="3.333333333333334" x2="160" y2="3.333333333333334" stroke="#000000" stroke-width="1"/>
+  </g>
+  
+  <!-- Dimensions -->
+  
+  <!-- Beds -->
+  
+  <!-- Wardrobes -->
+  <g transform="translate(460,340) rotate(0)">
+    <rect x="-140" y="-70" width="280" height="140" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Desk</text>
+  </g>
+  <g transform="translate(460,600) rotate(0)">
+    <rect x="-140" y="-70" width="280" height="140" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Desk</text>
+  </g>
+  <g transform="translate(860,340) rotate(0)">
+    <rect x="-140" y="-70" width="280" height="140" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Desk</text>
+  </g>
+  <g transform="translate(860,600) rotate(0)">
+    <rect x="-140" y="-70" width="280" height="140" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Desk</text>
+  </g>
+  <g transform="translate(460,440) rotate(0)">
+    <rect x="-45" y="-45" width="90" height="90" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="30" fill="#4b5563">Chair</text>
+  </g>
+  <g transform="translate(460,700) rotate(0)">
+    <rect x="-45" y="-45" width="90" height="90" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="30" fill="#4b5563">Chair</text>
+  </g>
+  <g transform="translate(860,440) rotate(0)">
+    <rect x="-45" y="-45" width="90" height="90" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="30" fill="#4b5563">Chair</text>
+  </g>
+  <g transform="translate(860,700) rotate(0)">
+    <rect x="-45" y="-45" width="90" height="90" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="30" fill="#4b5563">Chair</text>
+  </g>
+  <g transform="translate(1700,400) rotate(0)">
+    <rect x="-260" y="-100" width="520" height="200" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Table</text>
+  </g>
+  <g transform="translate(320,1080) rotate(0)">
+    <rect x="-70" y="-70" width="140" height="140" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Fridge</text>
+  </g>
+  <g transform="translate(380,1200) rotate(0)">
+    <rect x="-120" y="-40" width="240" height="80" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+    <text x="0" y="0" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="36" fill="#4b5563">Sink</text>
+  </g>
+  
+  <!-- Stairs -->
+</svg>

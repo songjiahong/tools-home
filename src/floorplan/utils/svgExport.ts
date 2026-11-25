@@ -8,7 +8,8 @@ export function generateFloorPlanSVG(
   beds: Bed[],
   wardrobes: Wardrobe[],
   stairs: Stair[],
-  unit: Unit = 'cm'
+  unit: Unit = 'cm',
+  watermark = false
 ): string {
   const scale = 2; // cm to pixels conversion
 
@@ -474,6 +475,11 @@ export function generateFloorPlanSVG(
     svg += `
   </g>`;
   });
+
+  if (watermark) {
+    svg += `
+  <text x="${minX + contentWidth - 24}" y="${minY + contentHeight - 24}" text-anchor="end" font-family="sans-serif" font-size="28" fill="#9ca3af">hexagonprofile.com</text>`;
+  }
 
   svg += `
 </svg>`;

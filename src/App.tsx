@@ -5,6 +5,8 @@ import Home from './pages/Home'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import NotFound from './pages/NotFound'
+import GuidePage from './pages/GuidePage'
+import { guides } from './pages/guideContent'
 import { I18nProvider } from './i18n/I18nProvider'
 
 const FloorPlanPage = lazy(() => import('./pages/FloorPlanPage'))
@@ -25,6 +27,13 @@ const children = (
     <Route path="floor-plan/studio-apartment" element={<Suspense fallback={loading}><FloorPlanPage template="studio" /></Suspense>} />
     <Route path="floor-plan/1-bedroom-apartment" element={<Suspense fallback={loading}><FloorPlanPage template="one" /></Suspense>} />
     <Route path="floor-plan/2-bedroom-apartment" element={<Suspense fallback={loading}><FloorPlanPage template="two" /></Suspense>} />
+ 
+    <Route path="floor-plan/bedroom-layout" element={<Suspense fallback={loading}><FloorPlanPage template="bedroom" /></Suspense>} />
+    <Route path="floor-plan/office-layout" element={<Suspense fallback={loading}><FloorPlanPage template="office" /></Suspense>} />
+    <Route path="floor-plan/3-bedroom-house" element={<Suspense fallback={loading}><FloorPlanPage template="house" /></Suspense>} />
+    {guides.map((g) => (
+      <Route key={g.slug} path={`guides/${g.slug}`} element={<GuidePage guide={g} />} />
+    ))}
     <Route path="terms" element={<Terms />} />
     <Route path="privacy" element={<Privacy />} />
     <Route path="*" element={<NotFound />} />

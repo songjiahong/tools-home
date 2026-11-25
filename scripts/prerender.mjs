@@ -14,14 +14,21 @@ const bundle = async (entry, out) => {
 }
 const { dictionaries } = await bundle('src/i18n/translations.ts', 'tr.mjs')
 const { terms, privacy } = await bundle('src/pages/legalContent.ts', 'legal.mjs')
+const { guides } = await bundle('src/pages/guideContent.ts', 'guides.mjs')
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const routes = [
-  { path: '/', meta: (l) => [dictionaries[l]['home.title'], dictionaries[l]['home.desc']] },
-  { path: '/floor-plan', meta: (l) => [dictionaries[l]['fp.title'], dictionaries[l]['fp.desc']] },
-  ...[['studio-apartment', 'studio'], ['1-bedroom-apartment', 'one'], ['2-bedroom-apartment', 'two']].map(([slug, k]) => ({
+  { path: '/', og: '/og/home.jpg', meta: (l) => [dictionaries[l]['home.title'], dictionaries[l]['home.desc']] },
+  { path: '/floor-plan', og: '/og/floor-plan.jpg', meta: (l) => [dictionaries[l]['fp.title'], dictionaries[l]['fp.desc']] },
+  ...[['studio-apartment', 'studio'], ['1-bedroom-apartment', 'one'], ['2-bedroom-apartment', 'two'], ['bedroom-layout', 'bedroom'], ['office-layout', 'office'], ['3-bedroom-house', 'house']].map(([slug, k]) => ({
     path: `/floor-plan/${slug}`,
+    og: `/og/${slug}.jpg`,
     meta: (l) => [dictionaries[l][`fp.tplPage.${k}.title`], dictionaries[l][`fp.tplPage.${k}.desc`]],
+  })),
+  ...guides.map((g) => ({
+    path: `/guides/${g.slug}`,
+    og: g.ogImage,
+    meta: (l) => [`${g.content[l].title} | Hexagon Profile`, g.content[l].desc],
   })),
   { path: '/terms', meta: (l) => [`${terms[l].title} | Hexagon Profile`, terms[l].metaDesc] },
   { path: '/privacy', meta: (l) => [`${privacy[l].title} | Hexagon Profile`, privacy[l].metaDesc] },
@@ -44,6 +51,8 @@ for (const r of routes) {
       .replace(/(<meta property="og:locale" content=")[^"]*"/, `$1${lang === 'zh' ? 'zh_CN' : 'en_AU'}"`)
       .replace(/(<meta name="twitter:title" content=")[^"]*"/, `$1${esc(title)}"`)
       .replace(/(<meta name="twitter:description" content=")[^"]*"/, `$1${esc(desc)}"`)
+      .replace(/(<meta property="og:image" content=")[^"]*"/, `$1${SITE}${r.og || '/og/home.jpg'}"`)
+      .replace(/(<meta name="twitter:image" content=")[^"]*"/, `$1${SITE}${r.og || '/og/home.jpg'}"`)
       .replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${self}" />`)
       .replace(/<link rel="alternate" hreflang="en"[^>]*>/, `<link rel="alternate" hreflang="en" href="${urlFor('en', r.path)}" />`)
       .replace(/<link rel="alternate" hreflang="zh"[^>]*>/, `<link rel="alternate" hreflang="zh" href="${urlFor('zh', r.path)}" />`)
@@ -57,7 +66,7 @@ for (const r of routes) {
 // sitemap with hreflang alternates
 const today = new Date().toISOString().slice(0, 10)
 const entries = routes.map((r) => {
-  const prio = r.path === '/' ? '1.0' : r.path === '/floor-plan' ? '0.9' : r.path.startsWith('/floor-plan/') ? '0.8' : '0.3'
+  const prio = r.path === '/' ? '1.0' : r.path === '/floor-plan' ? '0.9' : r.path.startsWith('/floor-plan/') ? '0.8' : r.path.startsWith('/guides/') ? '0.7' : '0.3'
   return ['en', 'zh'].map((l) => `  <url>
     <loc>${urlFor(l, r.path)}</loc>
     <lastmod>${today}</lastmod>

@@ -9,7 +9,11 @@ export interface PlanData {
   stairs: Stair[]
 }
 
-export type TemplateId = 'studio' | 'one' | 'two'
+export type TemplateId = 'studio' | 'one' | 'two' | 'bedroom' | 'office' | 'house'
+
+/** [x, y, w, h, kind, rotationDeg?] in cm; label comes from the translator. */
+type Furn = [number, number, number, number, string, number?]
+type Tr = (kind: string) => string
 
 const S = 2 // 1 cm = 2 px, same as the editor
 const OX = 200
@@ -18,7 +22,7 @@ const OY = 160
 type Seg = [number, number, number, number]
 interface Op { wall: number; pos: number; type: 'door' | 'window'; width?: number; flip?: boolean }
 
-function build(id: string, segs: Seg[], ops: Op[], beds: [number, number, 'queen' | 'single', number?][] = [], wardrobes: [number, number, number, number][] = []): PlanData {
+function build(id: string, segs: Seg[], ops: Op[], beds: [number, number, 'queen' | 'single', number?][] = [], wardrobes: [number, number, number, number][] = [], furn: Furn[] = [], tr: Tr = (k) => k): PlanData {
   const walls: Wall[] = segs.map(([x1, y1, x2, y2], i) => ({
     id: `tpl-${id}-w${i}`,
     start: { x: OX + x1 * S, y: OY + y1 * S },
@@ -40,12 +44,23 @@ function build(id: string, segs: Seg[], ops: Op[], beds: [number, number, 'queen
     openings,
     dimensions: [],
     beds: beds.map(([x, y, size, rot], i) => ({ id: `tpl-${id}-b${i}`, position: { x: OX + x * S, y: OY + y * S }, rotation: rot ?? 0, size })),
-    wardrobes: wardrobes.map(([x, y, w, h], i) => ({ id: `tpl-${id}-r${i}`, position: { x: OX + x * S, y: OY + y * S }, width: w, height: h, rotation: 0 })),
+    wardrobes: [
+      ...wardrobes.map(([x, y, w, h], i): Wardrobe => ({ id: `tpl-${id}-r${i}`, position: { x: OX + x * S, y: OY + y * S }, width: w, height: h, rotation: 0 })),
+      ...furn.map(([x, y, w, h, kind, rot], i): Wardrobe => ({
+        id: `tpl-${id}-f${i}`,
+        kind,
+        label: kind === 'wardrobe' ? undefined : tr(kind),
+        position: { x: OX + x * S, y: OY + y * S },
+        width: w,
+        height: h,
+        rotation: ((rot ?? 0) * Math.PI) / 180,
+      })),
+    ],
     stairs: [],
   }
 }
 
-export function getTemplate(id: TemplateId): PlanData {
+export function getTemplate(id: TemplateId, tr: Tr = (k) => k): PlanData {
   if (id === 'studio') {
     // 600 x 450 cm studio with a corner bathroom
     return build('studio', [
@@ -56,7 +71,7 @@ export function getTemplate(id: TemplateId): PlanData {
       { wall: 4, pos: 0.7, type: 'door', width: 75 },
       { wall: 0, pos: 0.3, type: 'window' },
       { wall: 3, pos: 0.5, type: 'window' },
-    ], [[110, 330, 'queen']], [[300, 40, 120, 60]])
+    ], [[110, 330, 'queen']], [[300, 40, 120, 60]], [[520, 60, 40, 70, 'toilet'], [520, 140, 60, 50, 'sink'], [300, 280, 160, 80, 'sofa', 0], [470, 340, 80, 80, 'table']], tr)
   }
   if (id === 'one') {
     // 800 x 600 cm one-bedroom apartment
@@ -70,7 +85,59 @@ export function getTemplate(id: TemplateId): PlanData {
       { wall: 0, pos: 0.2, type: 'window' },
       { wall: 0, pos: 0.7, type: 'window', width: 160 },
       { wall: 3, pos: 0.3, type: 'window' },
-    ], [[175, 150, 'queen']], [[40, 255, 60, 120]])
+    ], [[175, 150, 'queen']], [[40, 255, 60, 120]], [[675, 80, 40, 70, 'toilet'], [740, 60, 60, 50, 'sink'], [150, 470, 200, 90, 'sofa'], [650, 470, 140, 80, 'table'], [330, 560, 240, 60, 'kitchen']], tr)
+  }
+  if (id === 'bedroom') {
+    // 400 x 350 cm bedroom with desk
+    return build('bedroom', [
+      [0, 0, 400, 0], [400, 0, 400, 350], [400, 350, 0, 350], [0, 350, 0, 0],
+    ], [
+      { wall: 2, pos: 0.12, type: 'door' },
+      { wall: 0, pos: 0.5, type: 'window', width: 150 },
+    ], [[200, 120, 'queen']], [[40, 265, 60, 120]], [[345, 290, 120, 60, 'desk', 90], [300, 290, 45, 45, 'chair']], tr)
+  }
+  if (id === 'office') {
+    // 900 x 550 cm open-plan office with meeting room and kitchenette
+    return build('office', [
+      [0, 0, 900, 0], [900, 0, 900, 550], [900, 550, 0, 550], [0, 550, 0, 0],
+      [600, 0, 600, 260], [600, 260, 900, 260],
+      [0, 400, 200, 400], [200, 400, 200, 550],
+    ], [
+      { wall: 2, pos: 0.55, type: 'door', width: 120 },
+      { wall: 4, pos: 0.85, type: 'door' },
+      { wall: 7, pos: 0.4, type: 'door', width: 80 },
+      { wall: 0, pos: 0.15, type: 'window', width: 160 },
+      { wall: 0, pos: 0.45, type: 'window', width: 160 },
+      { wall: 0, pos: 0.85, type: 'window', width: 160 },
+      { wall: 3, pos: 0.45, type: 'window', width: 160 },
+    ], [], [], [
+      [130, 90, 140, 70, 'desk'], [130, 220, 140, 70, 'desk'], [330, 90, 140, 70, 'desk'], [330, 220, 140, 70, 'desk'],
+      [130, 140, 45, 45, 'chair'], [130, 270, 45, 45, 'chair'], [330, 140, 45, 45, 'chair'], [330, 270, 45, 45, 'chair'],
+      [750, 120, 260, 100, 'table'], [60, 460, 70, 70, 'fridge'], [90, 520, 120, 40, 'sink', 0],
+    ], tr)
+  }
+  if (id === 'house') {
+    // 1100 x 800 cm three-bedroom house
+    return build('house', [
+      [0, 0, 1100, 0], [1100, 0, 1100, 800], [1100, 800, 0, 800], [0, 800, 0, 0],
+      [367, 0, 367, 330], [733, 0, 733, 330], [0, 330, 1100, 330],
+      [600, 330, 600, 800], [600, 560, 1100, 560], [850, 560, 850, 800],
+    ], [
+      { wall: 2, pos: 0.73, type: 'door', width: 100 },
+      { wall: 6, pos: 0.16, type: 'door' },
+      { wall: 6, pos: 0.5, type: 'door' },
+      { wall: 6, pos: 0.84, type: 'door' },
+      { wall: 8, pos: 0.7, type: 'door', width: 80 },
+      { wall: 7, pos: 0.25, type: 'door', width: 100 },
+      { wall: 0, pos: 0.17, type: 'window' },
+      { wall: 0, pos: 0.5, type: 'window' },
+      { wall: 0, pos: 0.84, type: 'window' },
+      { wall: 3, pos: 0.3, type: 'window', width: 200 },
+      { wall: 1, pos: 0.7, type: 'window', width: 160 },
+    ], [[183, 120, 'queen'], [550, 120, 'queen'], [916, 120, 'single']], [[40, 280, 60, 110], [510, 280, 60, 110], [1060, 280, 60, 110]], [
+      [250, 650, 220, 90, 'sofa'], [250, 480, 90, 140, 'table'], [850, 420, 280, 60, 'kitchen'], [1050, 400, 70, 70, 'fridge'],
+      [880, 740, 40, 70, 'toilet'], [980, 760, 60, 50, 'sink'], [1060, 650, 170, 75, 'bathtub', 90],
+    ], tr)
   }
   // two: 1000 x 700 cm two-bedroom apartment
   return build('two', [
@@ -87,5 +154,5 @@ export function getTemplate(id: TemplateId): PlanData {
     { wall: 0, pos: 0.83, type: 'window' },
     { wall: 3, pos: 0.85, type: 'window', width: 160 },
     { wall: 1, pos: 0.85, type: 'window' },
-  ], [[165, 130, 'queen'], [835, 130, 'queen']], [[40, 235, 60, 100], [960, 235, 60, 100]])
+  ], [[165, 130, 'queen'], [835, 130, 'queen']], [[40, 235, 60, 100], [960, 235, 60, 100]], [[850, 600, 40, 70, 'toilet'], [850, 520, 60, 50, 'sink'], [200, 560, 200, 90, 'sofa'], [500, 380, 140, 80, 'table'], [840, 420, 240, 60, 'kitchen']], tr)
 }

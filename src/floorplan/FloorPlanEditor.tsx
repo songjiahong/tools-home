@@ -12,6 +12,7 @@ import { encodePlan, decodePlan, readShareToken } from './share'
 import { FURNITURE } from './furniture'
 import { Unit } from './utils/units'
 import { useI18n } from '../i18n/I18nProvider'
+import { TKey } from '../i18n/translations'
 import { track } from '../analytics'
 
 interface HistoryState extends PlanData {}
@@ -55,7 +56,8 @@ function download(blob: Blob, name: string) {
 export default function FloorPlanEditor({ initialTemplate, heading }: { initialTemplate?: TemplateId; heading?: string }) {
   const { t } = useI18n()
   const initial = useRef<HistoryState | null>(undefined as unknown as null)
-  if (initial.current === undefined) initial.current = initialTemplate ? getTemplate(initialTemplate) : readAutosave()
+  const trKind = (k: string) => t(`fu.${k}` as TKey)
+  if (initial.current === undefined) initial.current = initialTemplate ? getTemplate(initialTemplate, trKind) : readAutosave()
   const start = initial.current ?? EMPTY
 
   const [currentTool, setCurrentTool] = useState<Tool>('select')
@@ -88,6 +90,13 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
       /* ignore */
     }
   }
+  const [watermark, setWatermark] = useState(() => {
+    try {
+      return localStorage.getItem('hp_floorplan_watermark') === '1'
+    } catch {
+      return false
+    }
+  })
   const kindDef = FURNITURE.find((f) => f.id === furnitureKind) ?? FURNITURE[0]
   const furnitureLabel = furnitureKind === 'text' ? furnitureText || t('fu.text') : furnitureKind === 'wardrobe' ? '' : t(kindDef.key)
   const [showTemplates, setShowTemplates] = useState(false)
@@ -198,7 +207,7 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
 
   const handleTemplate = (id: TemplateId | 'blank') => {
     if (!confirmReplace()) return
-    applyPlan(id === 'blank' ? EMPTY : getTemplate(id))
+    applyPlan(id === 'blank' ? EMPTY : getTemplate(id, trKind))
     setShowTemplates(false)
     dismissGuide()
     if (id !== 'blank') track('floorplan_template', { template: id })
@@ -278,7 +287,7 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
     }
   }
 
-  const buildSvg = () => generateFloorPlanSVG(walls, openings, dimensions, beds, wardrobes, stairs, unit)
+  const buildSvg = () => generateFloorPlanSVG(walls, openings, dimensions, beds, wardrobes, stairs, unit, watermark)
 
   const handleExportSVG = () => {
     if (!hasContent) return alert(t('fp.noContent'))
@@ -363,6 +372,22 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
             <SlidersHorizontal size={16} />
           </button>
           <input ref={bgInputRef} type="file" accept="image/*" onChange={handleBgFile} className="hidden" />
+          <label className="flex items-center gap-1 text-xs text-gray-600 cursor-pointer select-none" title={t('fp.watermark')}>
+            <input
+              type="checkbox"
+              checked={watermark}
+              onChange={(e) => {
+                setWatermark(e.target.checked)
+                try {
+                  localStorage.setItem('hp_floorplan_watermark', e.target.checked ? '1' : '0')
+                } catch {
+                  /* ignore */
+                }
+              }}
+            />
+            <span className="hidden xl:inline">{t('fp.watermark')}</span>
+            <span className="xl:hidden">©</span>
+          </label>
           <button onClick={handleExportPNG} className={`${btn} bg-purple-500 hover:bg-purple-600`}>
             <Image size={16} /> {t('fp.exportPng')}
           </button>
@@ -492,15 +517,16 @@ export default function FloorPlanEditor({ initialTemplate, heading }: { initialT
 
       {showTemplates && (
         <div className="absolute inset-0 bg-black/40 z-20 flex items-center justify-center p-4" onClick={() => setShowTemplates(false)}>
-          <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xl max-h-[90%] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-800">{t('fp.tpl.title')}</h2>
               <button onClick={() => setShowTemplates(false)} aria-label={t('fp.tpl.close')} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {([['studio', 'fp.tpl.studio'], ['one', 'fp.tpl.one'], ['two', 'fp.tpl.two']] as const).map(([id, key]) => (
-                <button key={id} onClick={() => handleTemplate(id)} className="text-left border rounded-lg p-4 hover:border-primary-500 hover:bg-primary-50 transition">
-                  <div className="font-semibold text-gray-800">{t(key)}</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {(['studio', 'one', 'two', 'bedroom', 'office', 'house'] as const).map((id) => (
+                <button key={id} onClick={() => handleTemplate(id)} className="text-left border rounded-lg p-2 hover:border-primary-500 hover:bg-primary-50 transition">
+                  <img src={`/images/templates/${id}.svg`} alt="" width="200" height="120" className="w-full h-20 object-contain bg-white rounded" />
+                  <div className="font-semibold text-gray-800 text-sm mt-1">{t(`fp.tpl.${id}` as TKey)}</div>
                 </button>
               ))}
               <button onClick={() => handleTemplate('blank')} className="text-left border rounded-lg p-4 hover:border-primary-500 hover:bg-primary-50 transition">

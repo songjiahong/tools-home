@@ -92,7 +92,16 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 Translations live in `src/i18n/translations.ts`. `npm run build` also runs `scripts/prerender.mjs`,
 which writes per-route/per-language HTML shells (title, description, canonical, hreflang) and `sitemap.xml`.
 
-Optional analytics: set `VITE_GA_ID` (GA4 measurement id) at build time. Events: `floorplan_started`,
+Optional analytics (build-time, see `.env.example`): `VITE_CLARITY_ID` (Microsoft Clarity project id) and/or `VITE_GA_ID` (GA4 measurement id). Events: `floorplan_started`,
 `floorplan_template`, `floorplan_export`, `floorplan_save`, `floorplan_load`.
 
 Hosting needs an SPA fallback: unknown paths should serve `/index.html` (status 200) after static files are tried.
+
+## Generated assets
+
+`node scripts/gen-assets.mjs` (macOS only, uses `qlmanage`/`sips`) regenerates template thumbnails
+(`public/images/templates/*.svg`), Open Graph images (`public/og/*.jpg`) and PWA icons (`public/icons/*.png`).
+Run it after changing `src/floorplan/templates.ts`, and commit the output.
+
+Content pages: template pages under `/floor-plan/<slug>` and guides under `/guides/<slug>`
+(`src/pages/guideContent.ts`).
