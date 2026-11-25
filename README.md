@@ -1,4 +1,4 @@
-# Hexagon Tools
+# Hexagon Profile (hexagonprofile.com)
 
 A modern, open-source portal for free online tools. SEO-optimized and built with React.
 
@@ -79,3 +79,20 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 - Website: https://www.hexagonprofile.com/
 - GitHub: https://github.com/songjiahong/tools-home
 - Sponsor: https://github.com/sponsors/songjiahong
+
+
+## Structure
+
+- `/` and `/zh/` – home (English, Simplified Chinese; English uses the Australian flag in the menu)
+- `/floor-plan` and `/zh/floor-plan` – the 2D floor plan maker (`src/floorplan/`)
+- `/terms`, `/privacy` – legal pages (content in `src/pages/legalContent.ts`)
+- Bitbucket Deployment Dashboard is no longer hosted; the menu and home page link to
+  https://github.com/songjiahong/deployment-dashboard
+
+Translations live in `src/i18n/translations.ts`. `npm run build` also runs `scripts/prerender.mjs`,
+which writes per-route/per-language HTML shells (title, description, canonical, hreflang) and `sitemap.xml`.
+
+Optional analytics: set `VITE_GA_ID` (GA4 measurement id) at build time. Events: `floorplan_started`,
+`floorplan_template`, `floorplan_export`, `floorplan_save`, `floorplan_load`.
+
+Hosting needs an SPA fallback: unknown paths should serve `/index.html` (status 200) after static files are tried.

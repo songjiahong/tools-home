@@ -1,18 +1,44 @@
 import { Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
+import NotFound from './pages/NotFound'
+import { I18nProvider } from './i18n/I18nProvider'
+
+const FloorPlanPage = lazy(() => import('./pages/FloorPlanPage'))
+const loading = <div className="p-10 text-center text-gray-500">Loading…</div>
+
+const children = (
+  <>
+    <Route index element={<Home />} />
+    <Route
+      path="floor-plan"
+      element={
+        <Suspense fallback={<div className="p-10 text-center text-gray-500">Loading…</div>}>
+          <FloorPlanPage />
+        </Suspense>
+      }
+    />
+ 
+    <Route path="floor-plan/studio-apartment" element={<Suspense fallback={loading}><FloorPlanPage template="studio" /></Suspense>} />
+    <Route path="floor-plan/1-bedroom-apartment" element={<Suspense fallback={loading}><FloorPlanPage template="one" /></Suspense>} />
+    <Route path="floor-plan/2-bedroom-apartment" element={<Suspense fallback={loading}><FloorPlanPage template="two" /></Suspense>} />
+    <Route path="terms" element={<Terms />} />
+    <Route path="privacy" element={<Privacy />} />
+    <Route path="*" element={<NotFound />} />
+  </>
+)
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="terms" element={<Terms />} />
-        <Route path="privacy" element={<Privacy />} />
-      </Route>
-    </Routes>
+    <I18nProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>{children}</Route>
+        <Route path="/zh" element={<Layout />}>{children}</Route>
+      </Routes>
+    </I18nProvider>
   )
 }
 

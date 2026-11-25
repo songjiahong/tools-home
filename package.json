@@ -1,11 +1,11 @@
 {
-  "name": "tools-home",
+  "name": "hexagonprofile",
   "version": "1.0.0",
-  "description": "Modern tools portal - Free online tools collection",
+  "description": "Hexagon Profile \u2013 free online tools (floor plan maker and more)",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/prerender.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
